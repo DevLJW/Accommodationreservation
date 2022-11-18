@@ -3,6 +3,7 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+
     }
 }
 dependencyResolutionManagement {
@@ -10,6 +11,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        jcenter()
+
+        maven{
+            url 'https://naver.jfrog.io/artifactory/maven/' //네이버에서 제공해주는 Maven 추가
+        }
     }
 }
 rootProject.name = "Accommodationreservation"
