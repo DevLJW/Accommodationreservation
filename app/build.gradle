@@ -2,10 +2,14 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
+tasks.register("prepareKotlinBuildScriptModel"){}
 
 android {
     namespace 'com.example.accommodationreservation'
     compileSdk 32
+    task wrapper(type: Wrapper) {
+        gradleVersion = '7.0'
+    }
 
     defaultConfig {
         applicationId "com.example.accommodationreservation"
@@ -16,6 +20,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
 
     buildTypes {
         release {
@@ -43,4 +48,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
     
     implementation 'com.naver.maps:map-sdk:3.15.0' //네이버 지도 API 라이브러리 추가
+    implementation 'com.google.android.gms:play-services-location:18.0.0' //구글에서 제공해주는 라이브러리 추가
 }
