@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private val mapView: MapView by lazy{ //mapView 변수에 접근했을때 , {} 구문 실행
         
         findViewById(R.id.mapview)
+
     }
 
 
