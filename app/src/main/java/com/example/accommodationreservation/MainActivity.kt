@@ -9,6 +9,7 @@ import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -63,7 +64,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val locationSource = FusedLocationSource(this@MainActivity,LocationPermissionRequest)
     //Google Play 서비스의 FusedLocationProviderClient와 지자기, 가속도 센서를 활용해 최적의 위치를 반환하는 구현체인 FusedLocationSource
 
-        naverMap.locationSource = locationSource //네이버맵에 내위치 허가 권한 주기
+        //setLocationSource --> 현위치 버튼
+        naverMap.locationSource = locationSource // setLocationSource를 통해 현재 내위치를 권한허가 후, 최적의 위치로 보여줌
+
+
+        //지도에 꽂는 핀 만들기
+        val marker =  Marker()
+        marker.position = LatLng(37.500493,127.029740)
+        marker.map = naverMap
+
+
 
 
 
@@ -81,10 +91,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
 
-//requestCode는 요청할 때 보낸 요청코드이며, grantResults는 요청에 OK를 했을 때의 정보를 갖습니다.
-        if(locationSource.onRequestPermissionsResult(requestCode,permissions,grantResults)){
+        //requestCode는 요청할 때 보낸 요청코드이며, grantResults는 요청에 OK를 했을 때의 정보를 갖습니다.
+        if(locationSource.onRequestPermissionsResult(requestCode,permissions,grantResults)){ //요청한 권한과 사용자가 응답한 결과가 같을때
             if(!locationSource.isActivated){ //권한이 거부 되었을때
-            naverMap.locationTrackingMode = LocationTrackingMode.None
+            naverMap.locationTrackingMode = LocationTrackingMode.None //위치추적 모드 끄기
 
             }
             return
