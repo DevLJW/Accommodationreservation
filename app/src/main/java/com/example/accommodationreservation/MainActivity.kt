@@ -1,5 +1,6 @@
 package com.example.accommodationreservation
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
+import com.naver.maps.map.util.MarkerIcons
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -91,6 +93,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+
+
     private fun getHouseListFromAPI(){
 
         val retrofit = Retrofit.Builder()
@@ -110,7 +114,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
                         response.body()?.also { dto ->
 
-                            Log.d("Retrofit",dto.toString())
+
+                            updateMarker(dto.items)
 
                         }
 
@@ -125,6 +130,27 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
             })
         }
+
+    }
+
+    private fun updateMarker(house : List<HouseModel>){
+
+        house.forEach{ house ->
+
+            naverMap.apply{
+
+                val marker =  Marker()
+                marker.position = LatLng(house.lat,house.lng)
+                marker.tag = house.id
+                marker.icon = MarkerIcons.BLACK
+                marker.iconTintColor = Color.RED
+                marker.map = naverMap
+            }
+
+
+
+        }
+
 
     }
 
