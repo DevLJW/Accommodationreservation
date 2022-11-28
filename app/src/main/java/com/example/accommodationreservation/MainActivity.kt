@@ -144,4 +144,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             private const val LocationPermissionRequest = 1000 //권한 요청 값 1000
         }
 
+
+
 }
