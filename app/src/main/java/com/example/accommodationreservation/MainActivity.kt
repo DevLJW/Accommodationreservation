@@ -4,6 +4,8 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.viewpager2.widget.ViewPager2
+import com.example.accommodationreservation.Adapter.HouseViewPagerAdapter
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationSource
@@ -31,6 +33,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    private val viewPager: ViewPager2 by lazy{
+        findViewById(R.id.houseViewPager)
+    }
+
+    private val viewPagerAdapter = HouseViewPagerAdapter()
+
 
 
 
@@ -47,6 +55,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         //MapView의 getMapAsync() 메서드로 OnMapReadyCallback을 등록
 
         mapView.getMapAsync(this) //OnReadyMap 콜백 구현
+
+        viewPager.adapter = viewPagerAdapter
 
 
     }
@@ -110,12 +120,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
                             if(response.isSuccessful.not()){
                                 return
+
                             }
 
                         response.body()?.also { dto ->
 
 
                             updateMarker(dto.items)
+                            viewPagerAdapter.submitList(dto.items)
 
                         }
 
