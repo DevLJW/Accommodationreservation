@@ -2,6 +2,7 @@ package com.example.accommodationreservation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationSource
@@ -11,6 +12,11 @@ import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -69,15 +75,60 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         //지도에 꽂는 핀 만들기
+
+        /*
         val marker =  Marker()
         marker.position = LatLng(37.500493,127.029740)
         marker.map = naverMap
+
+         */
+
+        getHouseListFromAPI()
 
 
 
 
 
     }
+
+    private fun getHouseListFromAPI(){
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://run.mocky.io")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        retrofit.create(HouseService::class.java).also{ //또한
+            it.getHouseList().enqueue(object: Callback<HouseDto> {
+
+                override fun onResponse(call: Call<HouseDto>, response: Response<HouseDto>) { //성공시
+
+
+                            if(response.isSuccessful.not()){
+                                return
+                            }
+
+                        response.body()?.also { dto ->
+
+                            Log.d("Retrofit",dto.toString())
+
+                        }
+
+
+                }
+
+
+                override fun onFailure(call: Call<HouseDto>, t: Throwable) { //실패 시,
+
+                }
+
+
+            })
+        }
+
+    }
+
+
 
     override fun onRequestPermissionsResult( //사용자가 권한을 눌렀을때, 결과
         requestCode: Int,
