@@ -12,8 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.accommodationreservation.HouseModel
 import com.example.accommodationreservation.R
+//인플레이터 레이아웃 부분만 수정
 
-class HouseViewPagerAdapter:ListAdapter<HouseModel,HouseViewPagerAdapter.ItemViewHolder>(differ) {
+class HouseListAdapter:ListAdapter<HouseModel,HouseListAdapter.ItemViewHolder>(differ) {
 
 
         inner class ItemViewHolder(val view : View): RecyclerView.ViewHolder(view){
@@ -22,13 +23,13 @@ class HouseViewPagerAdapter:ListAdapter<HouseModel,HouseViewPagerAdapter.ItemVie
 
                val titleTextView = view.findViewById<TextView>(R.id.titleTextView)
                 val priceTextView = view.findViewById<TextView>(R.id.priceTextView)
-                val thumbnailImageView = view.findViewById<ImageView>(R.id.thumnailImageView)
-
-                titleTextView.text = houseModel.title
-                priceTextView.text = houseModel.price
+                val thumbnailImageView = view.findViewById<ImageView>(R.id.thumnailImageView1)
                 Glide.with(thumbnailImageView.context)
                     .load(houseModel.imgUrl)
                     .into(thumbnailImageView)
+                titleTextView.text = houseModel.title
+                priceTextView.text = houseModel.price
+
 
             }
 
@@ -40,7 +41,7 @@ class HouseViewPagerAdapter:ListAdapter<HouseModel,HouseViewPagerAdapter.ItemVie
 
             val inflater = LayoutInflater.from(parent.context) //메인 액티비티의 viewpager 정보 가져옴
 
-            return ItemViewHolder(inflater.inflate(R.layout.house_item_viewpager,parent,false)) //메인 액티비티 viewpager에 item 넣기
+            return ItemViewHolder(inflater.inflate(R.layout.item_house,parent,false)) //메인 액티비티 viewpager에 item 넣기
 
 
     }

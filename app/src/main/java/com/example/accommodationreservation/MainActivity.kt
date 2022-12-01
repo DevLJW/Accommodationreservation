@@ -4,7 +4,11 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import androidx.viewpager2.widget.ViewPager2
+import com.example.accommodationreservation.Adapter.HouseListAdapter
 import com.example.accommodationreservation.Adapter.HouseViewPagerAdapter
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraUpdate
@@ -38,6 +42,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private val viewPagerAdapter = HouseViewPagerAdapter()
+    private val recyclerAdapter = HouseListAdapter()
+
+    private val recyclerView: RecyclerView by lazy{
+
+        findViewById(R.id.recyclerView)
+    }
 
 
 
@@ -57,6 +67,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mapView.getMapAsync(this) //OnReadyMap 콜백 구현
 
         viewPager.adapter = viewPagerAdapter
+        recyclerView.adapter = recyclerAdapter
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
 
 
     }
@@ -128,6 +141,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
                             updateMarker(dto.items)
                             viewPagerAdapter.submitList(dto.items)
+                            recyclerAdapter.submitList(dto.items)
 
                         }
 
