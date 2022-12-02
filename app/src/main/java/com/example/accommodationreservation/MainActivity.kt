@@ -20,6 +20,7 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
+import com.naver.maps.map.widget.LocationButtonView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,6 +50,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         findViewById(R.id.recyclerView)
     }
 
+    private val currentLocationButton : LocationButtonView by lazy {
+        findViewById(R.id.currentLocation)
+    }
 
 
 
@@ -87,7 +91,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         naverMap.moveCamera(cameraUpdate) //초기 카메라 위치값 설정
         val uiSettingbtn = naverMap.uiSettings //지도에서 표시할 수 있는 UI 접근값 가져오기
-        uiSettingbtn.isLocationButtonEnabled = true // 내위치를 표기할 수 있는 UI 활성화
+        uiSettingbtn.isLocationButtonEnabled = false // 내위치를 표기할 수 있는 UI 활성화
+        currentLocationButton.map = naverMap
         
         //6.0 이상부터는 팝업을 띄워서 권한을 동의할지 아닌지 추가해야댐
         //메인액티비티 this 값과 요청권한 1000
@@ -163,7 +168,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         house.forEach{ house ->
 
-            naverMap.apply{
+
 
                 val marker =  Marker()
                 marker.position = LatLng(house.lat,house.lng)
@@ -171,7 +176,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 marker.icon = MarkerIcons.BLACK
                 marker.iconTintColor = Color.RED
                 marker.map = naverMap
-            }
+
 
 
 
