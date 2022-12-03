@@ -11,13 +11,9 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.accommodationreservation.Adapter.HouseListAdapter
 import com.example.accommodationreservation.Adapter.HouseViewPagerAdapter
 import com.naver.maps.geometry.LatLng
-import com.naver.maps.map.CameraUpdate
-import com.naver.maps.map.LocationSource
-import com.naver.maps.map.LocationTrackingMode
-import com.naver.maps.map.MapView
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
 import com.naver.maps.map.util.MarkerIcons
 import com.naver.maps.map.widget.LocationButtonView
@@ -27,7 +23,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+class MainActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickListener {
 
     private lateinit var naverMap: NaverMap
     private lateinit var locationSource:FusedLocationSource
@@ -74,6 +70,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         recyclerView.adapter = recyclerAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                val selectedHouseModel = viewPagerAdapter.currentList[position] //submitList로 넣었던 데이터 currentList로 가져오기
+                val cameraUpdate = CameraUpdate.scrollTo((LatLng(selectedHouseModel.lat,selectedHouseModel.lng)))
+                    .animate(CameraAnimation.Easing)
+                naverMap.moveCamera((cameraUpdate))
+            }
+
+
+        })
 
 
     }
@@ -170,8 +179,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
 
+
+
                 val marker =  Marker()
                 marker.position = LatLng(house.lat,house.lng)
+                marker.onClickListener = this // override fun onClick(p0: Overlay): Boolean
+
                 marker.tag = house.id
                 marker.icon = MarkerIcons.BLACK
                 marker.iconTintColor = Color.RED
@@ -251,6 +264,22 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
             private const val LocationPermissionRequest = 1000 //권한 요청 값 1000
         }
+
+    override fun onClick(p0: Overlay): Boolean { //overlay : 마커의 총집합
+        p0.tag
+
+        //(for문) 리스트에 있는 호텔 id 와 현재 클릭 된 마커의 tag 값을 비교해서 처음으로 같은 경우의 모델을 저장 없으면 null
+       val selectedModel = viewPagerAdapter.currentList.firstOrNull() { 
+           it.id == p0.tag //p0.tag -> 클릭한 마커의 아이디
+       }
+        selectedModel?.let { //모델이 null이 아니면 다음실행
+
+            val positon = viewPagerAdapter.currentList.indexOf(it) //리스트에서 selectedModel의 위치를 찾음
+            viewPager.currentItem = positon //현재 viewPager 의 page 를 업데이트
+        }
+            return true
+        }
+
 
 
 
