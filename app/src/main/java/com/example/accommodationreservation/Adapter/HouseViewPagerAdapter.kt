@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.accommodationreservation.HouseModel
 import com.example.accommodationreservation.R
 
-class HouseViewPagerAdapter:ListAdapter<HouseModel,HouseViewPagerAdapter.ItemViewHolder>(differ) {
+class HouseViewPagerAdapter(val itemClicked : (HouseModel) -> Unit):ListAdapter<HouseModel,HouseViewPagerAdapter.ItemViewHolder>(differ) {
 
 
         inner class ItemViewHolder(val view : View): RecyclerView.ViewHolder(view){
@@ -23,6 +23,11 @@ class HouseViewPagerAdapter:ListAdapter<HouseModel,HouseViewPagerAdapter.ItemVie
                val titleTextView = view.findViewById<TextView>(R.id.titleTextView)
                 val priceTextView = view.findViewById<TextView>(R.id.priceTextView)
                 val thumbnailImageView = view.findViewById<ImageView>(R.id.thumnailImageView)
+
+                view.setOnClickListener{
+                    itemClicked(houseModel)
+
+                }
 
                 titleTextView.text = houseModel.title
                 priceTextView.text = houseModel.price

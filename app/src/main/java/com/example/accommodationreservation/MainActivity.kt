@@ -1,5 +1,6 @@
 package com.example.accommodationreservation
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -38,7 +39,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickLis
         findViewById(R.id.houseViewPager)
     }
 
-    private val viewPagerAdapter = HouseViewPagerAdapter()
+    private val viewPagerAdapter = HouseViewPagerAdapter(itemClicked = {
+
+        val intent = Intent().apply{
+
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT,"[이 가격에 예약하기] ${it.title} ${it.price} 사진보기 : ${it.imgUrl}")
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(intent,null))
+
+
+    })
     private val recyclerAdapter = HouseListAdapter()
 
     private val recyclerView: RecyclerView by lazy{
