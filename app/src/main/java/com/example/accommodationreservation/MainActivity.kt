@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, Overlay.OnClickLis
 
         //MapView의 getMapAsync() 메서드로 OnMapReadyCallback을 등록
 
-        mapView.getMapAsync(this) //OnReadyMap 콜백 구현
+        mapView.getMapAsync(this) //OnReadyMap 콜백 구현 (해당 메소드 실행 시, Map Ready 상태가 됨)
 
         viewPager.adapter = viewPagerAdapter
         recyclerView.adapter = recyclerAdapter
